@@ -1,0 +1,182 @@
+{
+  "bens": {
+    "type": "rss",
+    "url": "https://bensbites.beehiiv.com/feeds/latest.rss",
+    "interval": 3,
+    "lang": "en"
+  },
+  "future": {
+    "type": "rss",
+    "url": "https://www.futurepedia.io/rss.xml",
+    "interval": 3,
+    "lang": "en"
+  },
+  "taaft": {
+    "type": "api",
+    "url": "https://theresanaiforthat.com/api/tools/latest",
+    "interval": 5,
+    "lang": "en"
+  },
+  "arxiv_ai": {
+    "type": "rss",
+    "url": "http://export.arxiv.org/rss/cs.AI",
+    "interval": 3,
+    "lang": "en"
+  },
+  "github_trend": {
+    "type": "scrap",
+    "url": "https://github.com/trending?since=daily&topic=ai",
+    "interval": 5,
+    "lang": "en"
+  },
+  "vc_ru": {
+    "type": "rss",
+    "url": "https://vc.ru/tag/ai/rss",
+    "interval": 4,
+    "lang": "ru"
+  },
+  "hackernews_ai": {
+    "type": "rss",
+    "url": "https://hnrss.org/newest?q=ai+OR+artificial+intelligence+OR+machine+learning",
+    "interval": 5,
+    "lang": "en"
+  },
+  "aitrends": {
+    "type": "rss",
+    "url": "https://aitrends.com/feed/",
+    "interval": 3,
+    "lang": "en"
+  },
+  "techcrunch_ai": {
+    "type": "rss",
+    "url": "https://techcrunch.com/tag/artificial-intelligence/feed/",
+    "interval": 3,
+    "lang": "en"
+  },
+  "venturebeat_ai": {
+    "type": "rss",
+    "url": "https://venturebeat.com/category/ai/feed/",
+    "interval": 3,
+    "lang": "en"
+  },
+  "medium_ai": {
+    "type": "rss",
+    "url": "https://medium.com/feed/tag/artificial-intelligence",
+    "interval": 5,
+    "lang": "en"
+  },
+  "reddit_ml": {
+    "type": "rss",
+    "url": "https://www.reddit.com/r/MachineLearning/.rss",
+    "interval": 6,
+    "lang": "en"
+  },
+  "kdnuggets": {
+    "type": "rss",
+    "url": "https://www.kdnuggets.com/feed",
+    "interval": 9,
+    "lang": "en"
+  },
+  "habr_ai": {
+    "type": "rss",
+    "url": "https://habr.com/ru/rss/hubs/artificial_intelligence/all/?fl=ru",
+    "interval": 8,
+    "lang": "ru"
+  },
+    "the_verge": {
+    "type": "rss",
+    "url": "https://www.theverge.com/rss/index.xml",
+    "interval": 5,
+    "lang": "en"
+  },
+  "ycombinator": {
+    "type": "rss",
+    "url": "https://news.ycombinator.com/rss",
+    "interval": 4,
+    "lang": "en"
+  },
+  "mit_tech": {
+    "type": "rss",
+    "url": "https://www.technologyreview.com/feed/",
+    "interval": 6,
+    "lang": "en"
+  },
+  "analytics_vidhya": {
+    "type": "rss",
+    "url": "https://www.analyticsvidhya.com/feed/",
+    "interval": 7,
+    "lang": "en"
+  },
+  "wired_ai": {
+    "type": "rss",
+    "url": "https://www.wired.com/feed/tag/artificial-intelligence/latest/rss",
+    "interval": 5,
+    "lang": "en"
+  },
+  "techrepublic": {
+    "type": "rss",
+    "url": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+    "interval": 6,
+    "lang": "en"
+  },
+   "towards_data_science": {
+    "type": "rss",
+    "url": "https://towardsdatascience.com/feed",
+    "interval": 7,
+    "lang": "en"
+  },
+  "ai_news": {
+    "type": "rss",
+    "url": "https://www.artificialintelligence-news.com/feed/",
+    "interval": 5,
+    "lang": "en"
+  },
+  "protocol_ai": {
+    "type": "rss",
+    "url": "https://www.protocol.com/ai/feed",
+    "interval": 6,
+    "lang": "en"
+  },
+  "sifted": {
+    "type": "rss",
+    "url": "https://sifted.eu/feed",
+    "interval": 8,
+    "lang": "en"
+  },
+  "datanami": {
+    "type": "rss",
+    "url": "https://www.datanami.com/feed/",
+    "interval": 6,
+    "lang": "en"
+  },
+  "infoq_ai": {
+    "type": "rss",
+    "url": "https://feed.infoq.com/ai-ml-data-eng/",
+    "interval": 7,
+    "lang": "en"
+  },
+  "pyimagesearch": {
+    "type": "rss",
+    "url": "https://pyimagesearch.com/blog/feed/",
+    "interval": 8,
+    "lang": "en"
+  },
+  "forbes_ai": {
+    "type": "rss",
+    "url": "https://www.forbes.com/ai/feed/",
+    "interval": 5,
+    "lang": "en"
+  },
+  "slashdata": {
+    "type": "rss",
+    "url": "https://slashdata.co/blog/feed/",
+    "interval": 9,
+    "lang": "en"
+  },
+  "insidebigdata": {
+    "type": "rss",
+    "url": "https://insidebigdata.com/feed/",
+    "interval": 6,
+    "lang": "en"
+  }
+}
