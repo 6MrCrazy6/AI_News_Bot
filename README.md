@@ -126,10 +126,23 @@ pipenv run pytest tests/test_ranker.py
 
 ### Telegram Bot Commands
 
-- `/stats` – News stats for the past 24 hours and week  
-- `/toggle source_id` – Enable/disable source (e.g., `/toggle bens`)  
-- `/digest now` – Send digest outside of scheduled time  
-- `/healthz` – Health check and current news queue size  
+**General Commands:**
+- `/help` – Explains how to use the bot and its features  
+- `/stats` – News statistics for the past week  
+- `/top_news [days] [count]` – Shows the top-N most liked news items  
+- `/source_stats [days]` – Shows performance rating of news sources  
+- `/language_stats [days]` – Statistics on news language usage  
+- `/healthz` – Bot health check  
+- `/list_sources` – Lists all configured news sources  
+
+**Admin Commands:**
+- `/toggle [source_id]` – Enable/disable a specific news source  
+- `/process_source [source_id]` – Manually process a specific source  
+- `/digest now` – Send the digest immediately  
+- `/breaking` – Publish urgent breaking news immediately  
+- `/reactions [days]` – Reaction statistics for the last N days  
+- `/source_info [source_id]` – Detailed information about a source  
+- `/db_status` – Show database status
 
 ## Source Configuration
 
