@@ -2,6 +2,22 @@
 
 A Telegram bot for automatic tracking, ranking, and publishing of AI-related news from various sources.
 
+## Table of Contents
+
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Requirements](#requirements)
+- [Installation and Setup](#installation-and-setup)
+- [Running](#running)
+- [Testing](#testing)
+- [Administration](#administration)
+- [Source Configuration](#source-configuration)
+- [Monitoring and Logging](#monitoring-and-logging)
+- [Extending Functionality](#extending-functionality)
+- [Notes](#notes)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+
 ## Features
 
 - 🤖 Automatic news aggregation from RSS feeds, GitHub Trending, and APIs  
@@ -193,6 +209,7 @@ Logs are saved in JSON format using `structlog`. Use appropriate tools or `tail 
 2. **LLM API errors**  
    - Check that API keys are valid  
    - Ensure the account still has available credits
+
 ## License
 
 This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.
