@@ -193,3 +193,11 @@ Logs are saved in JSON format using `structlog`. Use appropriate tools or `tail 
 2. **LLM API errors**  
    - Check that API keys are valid  
    - Ensure the account still has available credits
+## License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License.
+
+- **NonCommercial** — You may not use the material for commercial purposes.
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made.
+
+For more details, see the [LICENSE](LICENSE) file.
