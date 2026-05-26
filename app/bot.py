@@ -1,6 +1,6 @@
 import asyncio
 import os
-import scheduler
+from app import scheduler
 from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, Router
 from aiogram.filters import Command
@@ -9,9 +9,9 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 
-from db import get_connection, init_db, add_reaction, get_news_reactions
-from db import get_source_reaction_stats, get_news_by_message_id
-from common import TOKEN, CHANNEL_ID, logger, set_bot
+from app.db import get_connection, init_db, add_reaction, get_news_reactions
+from app.db import get_source_reaction_stats, get_news_by_message_id
+from app.common import TOKEN, CHANNEL_ID, logger, set_bot
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)

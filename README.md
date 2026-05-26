@@ -23,7 +23,7 @@ A Telegram bot for automatic tracking, ranking, and publishing of AI-related new
 - 🤖 Automatic news aggregation from RSS feeds, GitHub Trending, and APIs  
 - 🔍 Deduplication and removal of duplicate news  
 - ⭐ News ranking based on impact and freshness  
-- 📝 Automatic summarization using Gemini Flash and GPT-4o  
+- 📝 **AI-powered Summarization & Translation** using OpenRouter (Nemotron-3-Nano)
 - 📢 Instant publishing of breaking news and daily digests  
 - 🌍 Support for both Russian and English languages  
 - 👍 Popularity tracking via user likes on news posts  
@@ -43,7 +43,7 @@ ai-news-bot/
 │   │   └── taaft.py      # TheresAnAIForThat API fetcher
 │   ├── bot.py            # Telegram bot
 │   ├── db.py             # SQLite database handling
-│   ├── llm_processor.py  # Integration with LLMs (Gemini, GPT-4o)
+│   ├── llm_processor.py  # Integration with OpenRouter
 │   ├── ranker.py         # News ranking
 │   ├── scheduler.py      # Task scheduler
 │   └── summarizer.py     # News summarization and processing
@@ -60,7 +60,7 @@ ai-news-bot/
 
 - Python 3.11  
 - Telegram Bot API Token  
-- API Keys: OpenAI API (for GPT-4o) and Google AI API (for Gemini)  
+- **OpenRouter API Key** (for high-quality translation and summarization)
 - Internet access to work with news sources  
 
 ## Installation and Setup
@@ -68,8 +68,8 @@ ai-news-bot/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/ai-news-bot.git
-cd ai-news-bot
+git clone https://github.com/6MrCrazy6/AI_News_Bot.git
+cd AI_News_Bot
 ```
 
 ### 2. Set environment variables
@@ -79,16 +79,15 @@ Create the file `keys/keys.env` with the following content:
 ```
 TELEGRAM_TOKEN=your_telegram_bot_token
 TG_CHANNEL_ID=your_channel_id
-OPENAI_API_KEY=your_openai_api_key
-GOOGLE_API_KEY=your_google_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+OPENROUTER_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
 DB_URL=app/database/news.db
 ```
 
 Where:
 - `your_telegram_bot_token` - Token from @BotFather  
 - `your_channel_id` - Telegram channel ID (format: -100xxxxxxxxxx)  
-- `your_openai_api_key` - OpenAI key for GPT-4o  
-- `your_google_api_key` - Google AI key for Gemini  
+- `your_openrouter_api_key` - Key from OpenRouter.ai
 
 ### 3. Install dependencies
 
@@ -114,7 +113,7 @@ pipenv shell
 python -m app.bot
 ```
 
-### Start full service
+### Start full service (Recommended)
 
 ```bash
 # Activate virtual environment
@@ -130,12 +129,6 @@ python -m app.scheduler
 
 ```bash
 pipenv run pytest tests/
-```
-
-### Run a specific test
-
-```bash
-pipenv run pytest tests/test_ranker.py
 ```
 
 ## Administration
@@ -194,21 +187,23 @@ Logs are saved in JSON format using `structlog`. Use appropriate tools or `tail 
 
 ## Notes
 
-- Gemini and GPT-4o API keys are required for full functionality  
-- Breaking news (impact ≥ 4) is published immediately, others are compiled into a digest  
-- The digest is sent at 07:30 Kyiv time by default  
+- **OpenRouter** is used for high-quality translation and summarization.
+- Breaking news (impact ≥ 4) is published immediately, others are compiled into a digest.
+- The digest is sent at 07:30 Kyiv time by default.
 
 ## Troubleshooting
 
 ### Common issues:
 
-1. **Bot not sending messages to channel**  
-   - Make sure the bot is added as an admin in the channel  
-   - Ensure the channel ID is correct (including `-100` prefix)  
+1. **ModuleNotFoundError**
+   - Ensure you are running the bot from the project root using `python -m app.scheduler`.
 
-2. **LLM API errors**  
-   - Check that API keys are valid  
-   - Ensure the account still has available credits
+2. **Bot not sending messages to channel**  
+   - Make sure the bot is added as an admin in the channel.
+   - Ensure the channel ID is correct (including `-100` prefix).
+
+3. **OpenRouter API errors**  
+   - Check that your API key is valid and you have enough credits (or use a free model).
 
 ## License
 

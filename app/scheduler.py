@@ -11,11 +11,11 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from app.fetchers.rss import RSSFetcher
 from app.fetchers.github import GitHubTrendingFetcher
 from app.fetchers.taaft import TAAFTFetcher
-from db import init_db, add_source, get_connection, mark_as_sent, get_news_reactions, is_source_active
-from summarizer import process_news
-from ranker import compute_score
-from common import logger, get_bot, clean_html
-from llm_processor import ensure_russian_text, detect_language
+from app.db import init_db, add_source, get_connection, mark_as_sent, get_news_reactions, is_source_active
+from app.summarizer import process_news
+from app.ranker import compute_score
+from app.common import logger, get_bot, clean_html
+from app.llm_processor import ensure_russian_text, detect_language
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 CONFIG_PATH = os.path.join(current_dir, 'fetchers', 'Config', 'config.json')
@@ -133,7 +133,7 @@ def format_news_item(news):
         return formatted_message, news_id
 
     except Exception as e:
-        from common import logger
+        from app.common import logger
         logger.error(f"Error in format_news_item: {e}, news: {news[0] if len(news) > 0 else 'unknown'}")
 
         if len(news) > 2:
@@ -152,7 +152,7 @@ async def send_news_item(news):
         logger.error("Bot instance not available. Cannot send message.")
         return False
 
-    from common import CHANNEL_ID
+    from app.common import CHANNEL_ID
 
     try:
         # Проверяем, нужен ли принудительный перевод заголовка перед форматированием
@@ -279,7 +279,7 @@ async def send_breaking_news():
 
 # Функция для отправки дайджеста
 async def send_digest():
-    from common import CHANNEL_ID
+    from app.common import CHANNEL_ID
     bot = get_bot()
     if not bot:
         logger.error("Bot instance not available. Cannot send digest.")

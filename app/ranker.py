@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Optional
 
-from db import get_source_weight
+from app.db import get_source_weight
 
 def compute_hours_old(published: datetime) -> float:
 

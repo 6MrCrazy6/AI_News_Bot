@@ -1,9 +1,9 @@
 import difflib
 from typing import List, Dict
-from db import add_news_item, is_duplicate_url
-from llm_processor import process_news_batch, ensure_russian_text, detect_language
+from app.db import add_news_item, is_duplicate_url
+from app.llm_processor import process_news_batch, ensure_russian_text, detect_language
 import logging
-from common import clean_html
+from app.common import clean_html
 
 logger = logging.getLogger(__name__)
 
