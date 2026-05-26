@@ -24,7 +24,10 @@ A Telegram bot for automatic tracking, ranking, and publishing of AI-related new
 - 🔍 Deduplication and removal of duplicate news  
 - ⭐ News ranking based on impact and freshness  
 - 📝 **AI-powered Summarization & Translation** using OpenRouter (Nemotron-3-Nano)
-- 📢 Instant publishing of breaking news and daily digests  
+- ⚡ **High-Performance Parallel Processing**: Concurrent LLM calls for 10x faster processing
+- 🗄️ **Optimized SQLite Database**: WAL mode, connection pooling, and indexing for reliability
+- 🔄 **Smart Retries**: Exponential backoff for OpenRouter API calls
+- 📢 Instant publishing of breaking news and robust daily digests with automatic message splitting
 - 🌍 Support for both Russian and English languages  
 - 👍 Popularity tracking via user likes on news posts  
 

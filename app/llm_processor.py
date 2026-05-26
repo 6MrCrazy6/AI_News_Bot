@@ -2,6 +2,7 @@ import os
 import json
 import logging
 import re
+import asyncio
 from typing import Dict, List, Optional
 import httpx
 from bs4 import BeautifulSoup
@@ -58,8 +59,8 @@ FILTER_PROMPT = """
 Ответьте только "relevant" или "not_relevant".
 """
 
-async def call_openrouter(prompt: str, content: str, json_mode: bool = False) -> Optional[str]:
-    """Helper to call OpenRouter API."""
+async def call_openrouter(prompt: str, content: str, json_mode: bool = False, retries: int = 3) -> Optional[str]:
+    """Helper to call OpenRouter API with exponential backoff."""
     if not OPENROUTER_API_KEY:
         logger.error("OPENROUTER_API_KEY not found")
         return None
@@ -68,8 +69,8 @@ async def call_openrouter(prompt: str, content: str, json_mode: bool = False) ->
     headers = {
         "Authorization": f"Bearer {OPENROUTER_API_KEY}",
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/6MrCrazy6/AI_News_Bot", # Optional
-        "X-Title": "AI News Bot" # Optional
+        "HTTP-Referer": "https://github.com/6MrCrazy6/AI_News_Bot",
+        "X-Title": "AI News Bot"
     }
 
     data = {
@@ -84,22 +85,31 @@ async def call_openrouter(prompt: str, content: str, json_mode: bool = False) ->
     if json_mode:
         data["response_format"] = {"type": "json_object"}
 
-    try:
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            response = await client.post(url, json=data, headers=headers)
-            response.raise_for_status()
-            result = response.json()
-            return result["choices"][0]["message"]["content"]
-    except Exception as e:
-        logger.error(f"OpenRouter API error: {e}")
-        return None
+    for attempt in range(retries):
+        try:
+            async with httpx.AsyncClient(timeout=45.0) as client:
+                response = await client.post(url, json=data, headers=headers)
+                
+                if response.status_code == 429: # Rate limit
+                    wait_time = (attempt + 1) * 5
+                    logger.warning(f"Rate limited. Waiting {wait_time}s...")
+                    await asyncio.sleep(wait_time)
+                    continue
+                    
+                response.raise_for_status()
+                result = response.json()
+                return result["choices"][0]["message"]["content"]
+        except Exception as e:
+            logger.error(f"OpenRouter API error (attempt {attempt+1}/{retries}): {e}")
+            if attempt < retries - 1:
+                await asyncio.sleep((attempt + 1) * 2)
+    return None
 
 def clean_text(text: str) -> str:
     """Clean HTML and limit length."""
     if not text: return ""
     soup = BeautifulSoup(text, "html.parser")
     clean = soup.get_text()
-    # Remove excessive whitespace
     clean = re.sub(r'\s+', ' ', clean).strip()
     return clean[:4000]
 
@@ -115,39 +125,29 @@ def detect_language(text: str) -> str:
     return "unknown"
 
 async def ensure_russian_text(text: str) -> str:
-    """Translate text to Russian using LLM for better quality."""
+    """Translate text to Russian using LLM."""
     if not text: return ""
     if detect_language(text) == "ru":
         return text
 
     logger.info(f"Translating text via LLM: {text[:50]}...")
     translated = await call_openrouter(TRANSLATION_PROMPT, text)
-    
-    if translated:
-        return translated.strip()
-    
-    logger.warning("LLM translation failed, returning original text")
-    return text
+    return translated.strip() if translated else text
 
 async def filter_relevant_news(news_item: Dict) -> bool:
     """Filter news relevance."""
     if not ENABLE_FILTERING: return True
-    
     text = f"Title: {news_item.get('title')}\nContent: {news_item.get('summary', '')}"
     result = await call_openrouter(FILTER_PROMPT, text)
-    
-    if result:
-        return "relevant" in result.lower()
-    return True
+    return "relevant" in result.lower() if result else True
 
-async def process_news_batch(news_items: List[Dict]) -> List[Dict]:
-    """Process a batch of news items."""
-    processed = []
-    for item in news_items:
-        # First, ensure we have a Russian title for better context
+async def process_single_item(item: Dict) -> Optional[Dict]:
+    """Process a single news item (for parallel execution)."""
+    try:
+        # Translate title if needed
         item["title"] = await ensure_russian_text(item.get("title", ""))
         
-        # Then generate summary
+        # Generate summary
         content = f"Title: {item['title']}\nRaw Content: {item.get('summary', '')}"
         response = await call_openrouter(SUMMARY_PROMPT, content, json_mode=True)
         
@@ -162,13 +162,25 @@ async def process_news_batch(news_items: List[Dict]) -> List[Dict]:
                     "score": item.get("score", 0) + data.get("impact", 1) * 2,
                     "summary_lang": "ru"
                 })
-                processed.append(item)
+                return item
             except:
                 logger.error("Failed to parse LLM JSON response")
-        else:
-            # Fallback
-            item["summary"] = item.get("summary", item["title"])
-            item["impact"] = 1
-            processed.append(item)
-            
-    return processed
+        
+        # Fallback if LLM fails
+        item["summary"] = item.get("summary", item["title"])
+        item["impact"] = 1
+        return item
+    except Exception as e:
+        logger.error(f"Error processing single item: {e}")
+        return None
+
+async def process_news_batch(news_items: List[Dict]) -> List[Dict]:
+    """Process a batch of news items in parallel."""
+    if not news_items: return []
+    
+    logger.info(f"Processing {len(news_items)} items in parallel...")
+    tasks = [process_single_item(item) for item in news_items]
+    results = await asyncio.gather(*tasks)
+    
+    # Filter out None results
+    return [r for r in results if r is not None]
