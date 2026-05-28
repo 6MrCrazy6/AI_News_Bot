@@ -36,26 +36,28 @@ A Telegram bot for automatic tracking, ranking, and publishing of AI-related new
 ```
 ai-news-bot/
 ├── app/
-│   ├── database/         # Database directory
+│   ├── database/         # Database directory (auto-created)
 │   ├── fetchers/         # Modules for fetching news
 │   │   ├── Config/
 │   │   │   └── config.json  # Source configuration
 │   │   ├── base.py       # Base fetcher class
 │   │   ├── github.py     # GitHub trending fetcher
 │   │   ├── rss.py        # RSS feed fetcher
-│   │   └── taaft.py      # TheresAnAIForThat API fetcher
-│   ├── bot.py            # Telegram bot
-│   ├── db.py             # SQLite database handling
-│   ├── llm_processor.py  # Integration with OpenRouter
-│   ├── ranker.py         # News ranking
-│   ├── scheduler.py      # Task scheduler
-│   └── summarizer.py     # News summarization and processing
+│   │   ├── taaft.py      # TheresAnAIForThat API fetcher
+│   │   └── json_feed.py  # JSON Feed universal fetcher
+│   ├── bot.py            # Telegram bot handlers
+│   ├── common.py         # Shared utilities and logger
+│   ├── db.py             # SQLite database handling (Optimized)
+│   ├── llm_processor.py  # Integration with OpenRouter (Parallel)
+│   ├── ranker.py         # News ranking logic
+│   ├── scheduler.py      # Task scheduler and main entry point
+│   └── summarizer.py     # News processing pipeline
 ├── keys/                 # API keys and environment variables
-│   └── keys.env          # Keys file
-├── tests/                # Tests
-│   ├── test_ranker.py
-│   └── test_summarizer.py
-├── Pipfile               # Pipenv dependencies
+│   └── keys.env          # Keys file (gitignore recommended)
+├── tests/                # Tests and wrappers
+│   └── bot_wrapper.py
+├── requirements.txt      # Project dependencies
+├── LICENSE               # CC BY-NC 4.0 License
 └── README.md             # Project documentation
 ```
 
@@ -94,14 +96,8 @@ Where:
 
 ### 3. Install dependencies
 
-Using Pipenv:
-
 ```bash
-# Install Pipenv (if not installed)
-pip install pipenv
-
-# Install dependencies
-pipenv install
+pip install -r requirements.txt
 ```
 
 ## Running
@@ -109,29 +105,15 @@ pipenv install
 ### Start the bot (for testing)
 
 ```bash
-# Activate virtual environment
-pipenv shell
-
-# Run the bot
+# Run the bot handlers only
 python -m app.bot
 ```
 
 ### Start full service (Recommended)
 
 ```bash
-# Activate virtual environment
-pipenv shell
-
-# Run the scheduler with the bot
+# Run the scheduler with the bot (Full automation)
 python -m app.scheduler
-```
-
-## Testing
-
-### Run all tests
-
-```bash
-pipenv run pytest tests/
 ```
 
 ## Administration
@@ -143,7 +125,6 @@ pipenv run pytest tests/
 - `/stats` – News statistics for the past week  
 - `/top_news [days] [count]` – Shows the top-N most liked news items  
 - `/source_stats [days]` – Shows performance rating of news sources  
-- `/language_stats [days]` – Statistics on news language usage  
 - `/healthz` – Bot health check  
 - `/list_sources` – Lists all configured news sources  
 
@@ -152,8 +133,6 @@ pipenv run pytest tests/
 - `/process_source [source_id]` – Manually process a specific source  
 - `/digest now` – Send the digest immediately  
 - `/breaking` – Publish urgent breaking news immediately  
-- `/reactions [days]` – Reaction statistics for the last N days  
-- `/source_info [source_id]` – Detailed information about a source  
 - `/db_status` – Show database status
 
 ## Source Configuration
@@ -165,8 +144,8 @@ News sources are configured in `app/fetchers/Config/config.json`. Format:
   "source_id": {
     "type": "source_type",
     "url": "source_url",
-    "interval": "check_interval_minutes",
-    "lang": "source_language"
+    "interval": 60,
+    "lang": "en"
   }
 }
 ```
@@ -174,25 +153,22 @@ News sources are configured in `app/fetchers/Config/config.json`. Format:
 Source types:
 - `rss` – RSS feeds  
 - `scrap` – Web scraping (GitHub)  
-- `api` – API integrations  
-
-## Monitoring and Logging
-
-Logs are saved in JSON format using `structlog`. Use appropriate tools or `tail -f` to monitor logs during execution.
+- `api` – API integrations (TAAFT)
+- `json_feed` – JSON Feed standard
 
 ## Extending Functionality
 
 ### Adding a new source
 
 1. Add configuration in `app/fetchers/Config/config.json`  
-2. If a new source type is needed, create a fetcher class in `app/fetchers`  
+2. If a new source type is needed, create a fetcher class in `app/fetchers` inheriting from `BaseFetcher`
 3. Register the class in `FETCHER_CLASSES` in `app/scheduler.py`  
 
 ## Notes
 
 - **OpenRouter** is used for high-quality translation and summarization.
 - Breaking news (impact ≥ 4) is published immediately, others are compiled into a digest.
-- The digest is sent at 07:30 Kyiv time by default.
+- The digest is sent at 08:00 Kyiv time by default.
 
 ## Troubleshooting
 
@@ -206,7 +182,7 @@ Logs are saved in JSON format using `structlog`. Use appropriate tools or `tail 
    - Ensure the channel ID is correct (including `-100` prefix).
 
 3. **OpenRouter API errors**  
-   - Check that your API key is valid and you have enough credits (or use a free model).
+   - Check that your API key is valid. The bot now includes **exponential backoff retries** for better stability.
 
 ## License
 
