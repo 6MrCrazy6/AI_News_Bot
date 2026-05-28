@@ -20,7 +20,7 @@ A Telegram bot for automatic tracking, ranking, and publishing of AI-related new
 
 ## Features
 
-- 🤖 Automatic news aggregation from RSS feeds, GitHub Trending, and APIs  
+- 🤖 Automatic news aggregation from RSS feeds, GitHub Trending, JSON Feeds, and APIs  
 - 🔍 Deduplication and removal of duplicate news  
 - ⭐ News ranking based on impact and freshness  
 - 📝 **AI-powered Summarization & Translation** using OpenRouter (Nemotron-3-Nano)
