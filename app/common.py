@@ -1,15 +1,31 @@
 import logging
 import os
-from dotenv import load_dotenv
-from bs4 import BeautifulSoup
 import html
 import re
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+import sentry_sdk
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(current_dir)
 env_path = os.path.join(project_root, "keys", "keys.env")
 
 load_dotenv(dotenv_path=env_path)
+
+# Initialize Sentry
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_logging = LoggingIntegration(
+        level=logging.INFO,        # Capture info and above as breadcrumbs
+        event_level=logging.ERROR  # Send errors as events
+    )
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[sentry_logging],
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+    )
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -25,15 +41,12 @@ if not CHANNEL_ID:
 
 bot_instance = None
 
-
 def set_bot(bot):
     global bot_instance
     bot_instance = bot
 
-
 def get_bot():
     return bot_instance
-
 
 def clean_html(text):
     """Полная очистка текста от HTML-тегов, сущностей и служебных меток"""

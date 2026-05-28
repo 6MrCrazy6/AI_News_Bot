@@ -30,6 +30,7 @@ A Telegram bot for automatic tracking, ranking, and publishing of AI-related new
 - 📢 Instant publishing of breaking news and robust daily digests with automatic message splitting
 - 🌍 Support for both Russian and English languages  
 - 👍 Popularity tracking via user likes on news posts  
+- 🛠️ **Error Monitoring**: Integrated Sentry for real-time error tracking and alerting  
 
 ## Project Structure
 
@@ -87,6 +88,7 @@ TG_CHANNEL_ID=your_channel_id
 OPENROUTER_API_KEY=your_openrouter_api_key
 OPENROUTER_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
 DB_URL=app/database/news.db
+SENTRY_DSN=your_sentry_dsn_url
 ```
 
 Where:
