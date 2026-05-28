@@ -13,6 +13,7 @@ from aiogram.enums import ParseMode
 from app.fetchers.rss import RSSFetcher
 from app.fetchers.github import GitHubTrendingFetcher
 from app.fetchers.taaft import TAAFTFetcher
+from app.fetchers.json_feed import JSONFeedFetcher
 from app.db import init_db, add_source, get_connection, mark_as_sent, get_news_reactions, is_source_active
 from app.summarizer import process_news
 from app.ranker import compute_score
@@ -35,7 +36,8 @@ scheduler = AsyncIOScheduler(timezone=timezone('Europe/Kiev'))
 FETCHER_CLASSES = {
     'rss': RSSFetcher,
     'scrap': GitHubTrendingFetcher,
-    'api': TAAFTFetcher
+    'api': TAAFTFetcher,
+    'json_feed': JSONFeedFetcher
 }
 
 def create_reaction_keyboard(news_id):
